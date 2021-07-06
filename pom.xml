@@ -12,7 +12,7 @@
 	<groupId>com.cybertek</groupId>
 	<artifactId>jd-ticketing-project-orm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>jd-ticketing-project-orm</name>
+	<name>jd-ticketing-project-rest</name>
 	<description>Demo ProjectManagement for Spring Boot</description>
 
 	<properties>
@@ -20,6 +20,17 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -41,7 +52,16 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+		<dependency>
+		<groupId>org.springdoc</groupId>
+		<artifactId>springdoc-openapi-security</artifactId>
+		<version>1.5.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
