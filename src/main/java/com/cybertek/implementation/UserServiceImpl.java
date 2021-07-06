@@ -5,14 +5,12 @@ import com.cybertek.dto.TaskDTO;
 import com.cybertek.dto.UserDTO;
 import com.cybertek.entity.User;
 import com.cybertek.exception.TicketingProjectException;
-import com.cybertek.mapper.MappaerUtil;
-import com.cybertek.mapper.UserMapper;
+import com.cybertek.mapper.MapperUtil;
 import com.cybertek.repositories.UserRepository;
 import com.cybertek.service.ProjectService;
 import com.cybertek.service.TaskService;
 import com.cybertek.service.UserService;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +23,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private ProjectService projectService;
     private TaskService taskService;
-    private MappaerUtil mappaerUtil;
+    private MapperUtil mapperUtil;
     private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, @Lazy ProjectService projectService, TaskService taskService, MappaerUtil mappaerUtil, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy ProjectService projectService, TaskService taskService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.projectService = projectService;
         this.taskService = taskService;
-        this.mappaerUtil = mappaerUtil;
+        this.mapperUtil = mapperUtil;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -40,14 +38,14 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> listAllUsers() {
         List<User> list = userRepository.findAll();
 
-        return list.stream().map(user -> {return mappaerUtil.convert(user, new UserDTO());}).collect(Collectors.toList());
+        return list.stream().map(user -> {return mapperUtil.convert(user, new UserDTO());}).collect(Collectors.toList());
     }
 
     @Override
     public UserDTO findByUserName(String username) {
         User user = userRepository.findByUserName(username);
 
-        return mappaerUtil.convert(user, new UserDTO());
+        return mapperUtil.convert(user, new UserDTO());
     }
 
     @Override
@@ -55,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         dto.setEnabled(true);
 
-        User user = mappaerUtil.convert(dto, new User());
+        User user = mapperUtil.convert(dto, new User());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -63,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO update(UserDTO dto) {
         User user = userRepository.findByUserName(dto.getUserName());
-        User convertedUser = mappaerUtil.convert(dto, new User());
+        User convertedUser = mapperUtil.convert(dto, new User());
 
         convertedUser.setId(user.getId());
         convertedUser.setPassword(passwordEncoder.encode(convertedUser.getPassword()));
@@ -97,7 +95,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> listAllByRole(String role) {
        List<User> list = userRepository.findAllByRoleDescriptionIgnoreCase(role);
-        return list.stream().map(user -> {return mappaerUtil.convert(user, new UserDTO());}).collect(Collectors.toList());
+        return list.stream().map(user -> {return mapperUtil.convert(user, new UserDTO());}).collect(Collectors.toList());
     }
 
     @Override
