@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head th:replace="/fragments/head :: header"></head>
+</head>
+
+<body>
+<!-- ============================================================== -->
+<!-- main wrapper -->
+<!-- ============================================================== -->
+<div class="dashboard-main-wrapper">
+    <div th:replace="/fragments/header :: header"></div>
+
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header" id="top">
+                            <h2 class="pageheader-title">Project Create </h2>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- FORM START  -->
+                <!-- ============================================================== -->
+
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                        <form class="needs-validation" novalidate  th:action="@{/project/create}" method="post" th:object="${project}">
+                            <div class="row">
+
+                                <div class="col-xl-12 col-lg-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="projectname" class="col-form-label">Project Name</label>
+                                        <input id="projectname" type="text" class="form-control" th:field="*{projectName}" placeholder="Project Name" required>
+                                        <div class="invalid-feedback">Please enter the project name</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="projectcode" class="col-form-label">Project Code</label>
+                                        <input id="projectcode" type="text" class="form-control" th:field="*{projectCode}" placeholder="Project Code" required>
+                                        <div class="invalid-feedback">Please enter the project code</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="input-select">Assigned Manager</label>
+                                        <select class="form-control" id="input-select" th:field="*{assignedManager}" required="required">
+                                            <option th:value="''">Select</option>
+                                            <option th:each="manager:${managers}" th:value="${manager.userName}" th:text="${manager.firstName + ' ' + manager.lastName}"></option>
+
+                                        </select><div class="invalid-feedback">Please choose the manager</div><br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="project-start-date">Project Start Date</label>
+                                        <input class="form-control" type="date" id="project-start-date" th:field="*{startDate}"><br>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="project-end-date">Project End Date</label>
+                                        <input class="form-control" type="date" id="project-end-date" th:field="*{endDate}"><br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="project-detail">Project Detail</label>
+                                        <textarea id="project-detail" type="text" class="form-control" required th:field="*{projectDetail}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="float-right">
+                                        <button type="submit" class="btn btn-success rounded-0 btn-sm">Save</button><br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="form">
+
+                    <!-- STRIPE TABLE -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Project List</h5>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Project</th>
+                                        <th scope="col">Project Name</th>
+                                        <th scope="col">Start/End Date</th>
+                                        <th scope="col">Manager</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="project:${projects}" >
+                                        <td th:text="${project.projectCode}"></td>
+                                        <td th:text="${project.projectName}"></td>
+                                        <td th:text="${#temporals.format(project.startDate,'MM.dd.yyyy') + '-' + #temporals.format(project.endDate,'MM.dd.yyyy')}"></td>
+                                        <td th:text="${project.assignedManager.firstName + ' ' + project.assignedManager.lastName}"></td>
+                                        <td th:text="${project.projectStatus}"></td>
+                                        <td>
+                                            <a th:href="@{/project/update/{id}(id=${project.projectCode})}"><button type="button" class="btn btn-warning btn-sm" th:text="Update">Update</button></a>
+                                            <a th:href="@{/project/delete/{id}(id=${project.projectCode})}"> <button type="button" class="btn btn-danger btn-sm" th:text="Delete">Delete</button></a>
+                                            <a th:href="@{/project/complete/{id}(id=${project.projectCode})}"><button type="button" class="btn btn-info btn-sm" th:text="Complete">Complete</button></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end striped table -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- end basic form  -->
+                <!-- ============================================================== -->
+
+            </div>
+        </div>
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+    <div th:replace="/fragments/footer :: footer"></div>
+</div>
+<!-- ============================================================== -->
+<!-- end main wrapper  -->
+<!-- ============================================================== -->
+<div th:replace="/fragments/javascript :: js"></div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head th:replace="/fragments/head :: header"></head>
+</head>
+
+<body>
+<!-- ============================================================== -->
+<!-- main wrapper -->
+<!-- ============================================================== -->
+<div class="dashboard-main-wrapper">
+    <div th:replace="/fragments/header :: header"></div>
+
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header" id="top">
+                            <h2 class="pageheader-title">Task Assign </h2>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- FORM START  -->
+                <!-- ============================================================== -->
+
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                        <form class="needs-validation" novalidate th:action="@{/task/create}" th:method="post" th:object="${task}">
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="project-select">Project</label>
+                                        <select class="form-control" id="project-select"  th:field="*{project}" required="required">
+                                            <option th:value="''">Select</option>
+                                            <option th:each="project:${projects}" th:value="${project.projectCode}"
+                                                    th:text="${project.projectCode + '-' + project.projectName}" ></option>
+
+                                        </select><div class="invalid-feedback">Please choose the project</div><br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="employee-select">Assigned Employee</label>
+                                        <select class="form-control" id="employee-select"  th:field="*{assignedEmployee}" required="required">
+                                            <option th:value="''">Select</option>
+                                            <option th:each="employee :${employees}" th:value="${employee.userName}"
+                                                    th:text="${employee.firstName + ' ' + employee.lastName}"></option>
+
+                                        </select><div class="invalid-feedback">Please choose the employee</div><br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="projectcode" class="col-form-label">Task Subject</label>
+                                        <input id="projectcode" type="text" class="form-control" th:field="*{taskSubject}" placeholder="Task Subject" required>
+                                        <div class="invalid-feedback">Please enter the task subject</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="project-detail">Detail</label>
+                                        <textarea id="project-detail" type="text" class="form-control" th:field="*{taskDetail}" required ></textarea>
+                                        <div class="invalid-feedback">Please enter the task details</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="float-right">
+                                        <button type="submit" class="btn btn-success rounded-0 btn-sm">Save</button><br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="form">
+
+                    <!-- STRIPE TABLE -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Task List</h5>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Project</th>
+                                        <th scope="col">Task Subject</th>
+                                        <th scope="col">Assigned Employee</th>
+                                        <th scope="col">Assigned Date</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="task:${tasks}">
+                                        <td th:text="${task.project.projectCode + '-' + task.project.projectName}"></td>
+                                        <td th:text="${task.taskSubject}"></td>
+                                        <td th:text="${task.assignedEmployee.firstName + ' ' + task.assignedEmployee.lastName}"></td>
+                                        <td th:text="${#temporals.format(task.assignedDate,'MM/dd/yyyy')}"></td>
+                                        <td th:text="${task.taskStatus}"></td>
+                                        <td>
+                                            <a th:href="@{/task/update/{id}(id=${task.id})}"><button type="button" class="btn btn-warning btn-sm" th:text="Update">Update</button></a>
+                                            <a th:href="@{/task/delete/{id}(id=${task.id})}"> <button type="button" class="btn btn-danger btn-sm" th:text="Delete">Delete</button></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end striped table -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- end basic form  -->
+                <!-- ============================================================== -->
+
+            </div>
+        </div>
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+    <div th:replace="/fragments/footer :: footer"></div>
+</div>
+<!-- ============================================================== -->
+<!-- end main wrapper  -->
+<!-- ============================================================== -->
+<div th:replace="/fragments/javascript :: js"></div>
+</body>
+</html>
