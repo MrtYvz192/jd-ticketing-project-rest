@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UserPrincipal implements UserDetails {
+public class UserPrincipal implements UserDetails { // this class is not needed as we work with API here. It's needed when we deal with form login
 
     private User user;
 
