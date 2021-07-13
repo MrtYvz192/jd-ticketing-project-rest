@@ -35,7 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String username = null;
 
         if (authorizationHeader != null) {
-            token = authorizationHeader.replace("Bearer",""); // IOT get rid of Bearer words ath the beginning of the token
+            token = authorizationHeader.replace("Bearer",""); // IOT get rid of Bearer word at the beginning of the token
             username = jwtUtil.extractUsername(token);
         }
 
