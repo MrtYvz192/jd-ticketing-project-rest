@@ -20,9 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Authentication Controller", description = "Authenticate API")
@@ -76,6 +74,20 @@ public class LoginController {
 		sendEmail(createEmail(createdUser));
 		return ResponseEntity.ok(new ResponseWrapper("User has been created!",createdUser));
 	}
+
+
+	@DefaultExceptionMessage(defaultMessage = "Failed to confirm email, please try again!")
+	@GetMapping("/confirmation")
+	@Operation(summary = "Confirm account")
+	public ResponseEntity<ResponseWrapper> confirmEmail(@RequestParam("token") String token) throws TicketingProjectException {
+
+		ConfirmationToken confirmationToken = confirmationTokenService.readByToken(token);
+		UserDTO confirmUser = userService.confirm(confirmationToken.getUser());
+		confirmationTokenService.delete(confirmationToken);
+
+		return ResponseEntity.ok(new ResponseWrapper("User has been confirmed",confirmUser));
+	}
+
 
 	private MailDTO createEmail(UserDTO userDTO){
 		User user = mapperUtil.convert(userDTO,new User());
