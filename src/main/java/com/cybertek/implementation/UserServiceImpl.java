@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         if(foundUser != null){
             throw new TicketingProjectException("User already exists!");
         }
-        dto.setEnabled(true);
+        dto.setEnabled(false);
 
         User user = mapperUtil.convert(dto, new User());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
