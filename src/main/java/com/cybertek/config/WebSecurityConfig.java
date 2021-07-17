@@ -29,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] permittedURLs ={ //--> a different way to create a list of publicly allowed accesses
             "/authenticate",
             "/create-user",
+            "/confirmation",
             "/api/p1/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
