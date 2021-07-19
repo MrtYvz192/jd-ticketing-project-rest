@@ -3,6 +3,7 @@ package com.cybertek.service;
 import com.cybertek.dto.ProjectDTO;
 import com.cybertek.entity.Project;
 import com.cybertek.entity.User;
+import com.cybertek.exception.TicketingProjectException;
 
 import java.util.List;
 
@@ -12,15 +13,15 @@ public interface ProjectService {
 
     List<ProjectDTO> listAllProjects();
 
-    void save(ProjectDTO dto);
+    ProjectDTO save(ProjectDTO dto) throws TicketingProjectException;
 
-    void update(ProjectDTO dto);
+    ProjectDTO update(ProjectDTO dto) throws TicketingProjectException;
 
-    void delete(String code);
+    void delete(String code) throws TicketingProjectException;
 
-    void complete(String projectCode);
+    ProjectDTO complete(String projectCode) throws TicketingProjectException;
 
-    List<ProjectDTO> listAllProjectDetails();
+    List<ProjectDTO> listAllProjectDetails() throws TicketingProjectException;
 
     List<ProjectDTO> readAllByAssignedManager(User user);
 
