@@ -86,7 +86,7 @@ public class UserController {
 
     @DeleteMapping("/{username}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Find the User")
+    @Operation(summary = "Delete the User")
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String username){
         userService.deleteByUsername(username);
@@ -96,7 +96,7 @@ public class UserController {
 
     @GetMapping("/role")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, try again!")
-    @Operation(summary = "Find the User")
+    @Operation(summary = "Retrieve User(s) By Role")
     @PreAuthorize("hasAnyAuthority('Admin','Manager')")
     public ResponseEntity<ResponseWrapper> readByRole(@RequestParam String role){
         List<UserDTO> result = userService.listAllByRole(role);
