@@ -5,6 +5,7 @@ import com.cybertek.filter.SecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) //iot be able to regulate authorizations
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private SecurityFilter securityFilter;
@@ -28,7 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] permittedURLs ={ //--> a different way to create a list of publicly allowed accesses
             "/authenticate",
-            "/create-user",
             "/confirmation",
             "/api/p1/**",
             "/v3/api-docs/**",
