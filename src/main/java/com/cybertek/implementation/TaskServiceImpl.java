@@ -50,33 +50,32 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task save(TaskDTO dto) {
+    public TaskDTO save(TaskDTO dto) {
         dto.setAssignedDate(LocalDate.now());
         dto.setTaskStatus(Status.OPEN);
         Task task = mapperUtil.convert(dto,new Task());
-        return taskRepository.save(task);
+        return mapperUtil.convert(taskRepository.save(task),new TaskDTO());
     }
 
     @Override
-    public void update(TaskDTO dto) {
-        Optional<Task> task = taskRepository.findById(dto.getId());
+    public TaskDTO update(TaskDTO dto) throws TicketingProjectException {
+        Task task = taskRepository.findById(dto.getId()).orElseThrow(()-> new TicketingProjectException("Task does not exist!"));
         Task converted = mapperUtil.convert(dto, new Task());
-        if (task.isPresent()){
-            converted.setTaskStatus(task.get().getTaskStatus());
-            converted.setAssignedDate(task.get().getAssignedDate());
-            converted.setId(task.get().getId());
-            taskRepository.save(converted);
-        }
+
+//            converted.setTaskStatus(task.get().getTaskStatus());
+//            converted.setAssignedDate(task.get().getAssignedDate());
+//            converted.setId(task.get().getId());
+        return mapperUtil.convert(taskRepository.save(converted),new TaskDTO());
 
     }
 
     @Override
-    public void delete(Long id) {
-        Optional<Task> task = taskRepository.findById(id);
-        if (task.isPresent()){
-            task.get().setIsDeleted(true);
-            taskRepository.save(task.get());
-        }
+    public void delete(Long id) throws TicketingProjectException {
+        Task task = taskRepository.findById(id).orElseThrow(()-> new TicketingProjectException("Task does not exist!"));
+
+            task.setIsDeleted(true);
+            taskRepository.save(task);
+
     }
 
     @Override
@@ -93,7 +92,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteByProject(ProjectDTO project) {
         List<TaskDTO> taskDTOS = listAllByProject(project);
-        taskDTOS.forEach(taskDTO -> delete(taskDTO.getId()));
+        taskDTOS.forEach(taskDTO -> {
+            try {
+                delete(taskDTO.getId());
+            } catch (TicketingProjectException e) {
+                e.printStackTrace();
+            }
+        });
 
 
     }

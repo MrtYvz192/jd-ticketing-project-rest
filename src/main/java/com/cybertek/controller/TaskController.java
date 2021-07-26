@@ -47,7 +47,7 @@ public class TaskController {
         return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved tasks by project manager",taskList));
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     @DefaultExceptionMessage(defaultMessage = "Something went wrong, please try again later!")
     @Operation(summary = "Read tasks by id")
     @PreAuthorize("hasAnyAuthority('Manager','Employee')")
@@ -55,5 +55,33 @@ public class TaskController {
         TaskDTO currentTask = taskService.findById(id);
         return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved", currentTask));
     }
+
+    @PostMapping
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, please try again later!")
+    @Operation(summary = "Create a new task")
+    @PreAuthorize("hasAuthority('Manager')")
+    public ResponseEntity<ResponseWrapper> create(@RequestBody TaskDTO task) throws TicketingProjectException {
+        TaskDTO createdTask = taskService.save(task);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully created", createdTask));
+    }
+
+    @DeleteMapping("/{id}")
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, please try again later!")
+    @Operation(summary = "Delete task by id")
+    @PreAuthorize("hasAuthority('Manager')")
+    public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) throws TicketingProjectException {
+        taskService.delete(id);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully deleted"));
+    }
+
+    @PutMapping
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, please try again later!")
+    @Operation(summary = "Create a new task")
+    @PreAuthorize("hasAuthority('Manager')")
+    public ResponseEntity<ResponseWrapper> update(@RequestBody TaskDTO task) throws TicketingProjectException {
+        TaskDTO updatedTask = taskService.update(task);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully created", updatedTask));
+    }
+
 
 }
