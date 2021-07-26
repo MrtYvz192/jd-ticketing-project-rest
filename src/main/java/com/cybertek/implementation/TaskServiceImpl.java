@@ -129,23 +129,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void updateStatus(TaskDTO dto) {
-        Optional<Task> task = taskRepository.findById(dto.getId());
-        if(task.isPresent()){
-            task.get().setTaskStatus(dto.getTaskStatus());
-            taskRepository.save(task.get());
-        }
+    public TaskDTO updateStatus(TaskDTO dto) throws TicketingProjectException {
+        Task task = taskRepository.findById(dto.getId()).orElseThrow(()-> new TicketingProjectException("Task does not exist!"));
+
+        task.setTaskStatus(dto.getTaskStatus());
+        return mapperUtil.convert(taskRepository.save(task),new TaskDTO());
+
     }
 
-    @Override
-    public List<TaskDTO> listAllTasksByStatus(Status status) {
-        //getting the username based on the logged in user
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        User user = userRepository.findByUserName(username);
-        List<Task>  list = taskRepository.findAllByTaskStatusIsAndAssignedEmployee(status,user);
-        return list.stream().map(task -> mapperUtil.convert(task,new TaskDTO())).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<TaskDTO> listAllTasksByStatus(Status status) {
+//        //getting the username based on the logged in user
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//
+//        User user = userRepository.findByUserName(username);
+//        List<Task>  list = taskRepository.findAllByTaskStatusIsAndAssignedEmployee(status,user);
+//        return list.stream().map(task -> mapperUtil.convert(task,new TaskDTO())).collect(Collectors.toList());
+//    }
 
     @Override
     public List<TaskDTO> readAllByEmployee(User user) {
