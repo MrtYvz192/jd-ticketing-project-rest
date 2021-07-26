@@ -80,8 +80,19 @@ public class TaskController {
     @PreAuthorize("hasAuthority('Manager')")
     public ResponseEntity<ResponseWrapper> update(@RequestBody TaskDTO task) throws TicketingProjectException {
         TaskDTO updatedTask = taskService.update(task);
-        return ResponseEntity.ok(new ResponseWrapper("Successfully created", updatedTask));
+        return ResponseEntity.ok(new ResponseWrapper("Successfully updated", updatedTask));
     }
+
+    @GetMapping("/employee")
+    @DefaultExceptionMessage(defaultMessage = "Something went wrong, please try again later!")
+    @Operation(summary = "Read all un-completed tasks for employee")
+    @PreAuthorize("hasAuthority('Employee')")
+    public ResponseEntity<ResponseWrapper> employeeReadAllNonCompletedTasks() throws TicketingProjectException {
+        List<TaskDTO> taskList = taskService.listAllTasksByStatusIsNot(Status.COMPLETE);
+        return ResponseEntity.ok(new ResponseWrapper("Successfully retrieved un-completed tasks",taskList));
+    }
+
+
 
 
 }

@@ -109,11 +109,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
-        //getting the username based on the logged in user
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    public List<TaskDTO> listAllTasksByStatusIsNot(Status status) throws TicketingProjectException {
+        //getting the id based on the logged in user
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findById(Long.parseLong(id)).orElseThrow(()-> new TicketingProjectException("User does not exist!"));
         List<Task>  list = taskRepository.findAllByTaskStatusIsNotAndAssignedEmployee(status,user);
         return list.stream().map(task -> mapperUtil.convert(task,new TaskDTO())).collect(Collectors.toList());
     }

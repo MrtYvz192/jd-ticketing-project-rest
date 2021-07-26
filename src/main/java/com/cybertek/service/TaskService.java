@@ -24,7 +24,7 @@ public interface TaskService {
     void deleteByProject(ProjectDTO project);
     List<TaskDTO> listAllByProject(ProjectDTO project);
 
-    List<TaskDTO> listAllTasksByStatusIsNot(Status status);
+    List<TaskDTO> listAllTasksByStatusIsNot(Status status) throws TicketingProjectException;
 
     List<TaskDTO> listAllTasksByProjectManager() throws TicketingProjectException;
 
