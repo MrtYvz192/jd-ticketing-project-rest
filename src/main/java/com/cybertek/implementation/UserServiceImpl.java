@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService {
 
         convertedUser.setId(user.getId());
         convertedUser.setPassword(passwordEncoder.encode(convertedUser.getPassword()));
+        if(!user.getEnabled()){
+            throw new TicketingProjectException("User is not enabled!");
+        }
         convertedUser.setEnabled(true);
         userRepository.save(convertedUser);
 

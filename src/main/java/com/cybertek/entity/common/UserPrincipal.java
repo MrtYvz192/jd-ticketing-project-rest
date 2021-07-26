@@ -60,7 +60,7 @@ public class UserPrincipal implements UserDetails { // this class is not needed 
 
     @Override
     public boolean isEnabled() {
-        return this.user.isEnabled();
+        return this.user.getEnabled();
     }
 
     public Long getId(){
